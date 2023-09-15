@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
+import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/pages/auth/singup_page.dart';
 
 import '../../widgets/ResponsiveContainer.dart';
@@ -16,15 +18,27 @@ class _LoginPageState extends State<LoginPage> {
   final controllerEmail = TextEditingController(text: '');
   final controllerPassword = TextEditingController(text: '');
 
-  _login(theEmail, thePassword) async {
-    print('_login $theEmail $thePassword');
+  AuthenticationController authenticationController = Get.find();
 
-    Get.snackbar(
-      "Login Failed",
-      "Invalid email or password",
-      icon: const Icon(Icons.person, color: Colors.red),
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  _login(email, password) async {
+    logInfo('_login $email $password');
+
+    try {
+      await authenticationController.login(email, password);
+      Get.snackbar(
+        "Login sucessfull",
+        "Welcome!",
+        icon: const Icon(Icons.person, color: Colors.green),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (error) {
+      Get.snackbar(
+        "Login Failed",
+        error.toString(),
+        icon: const Icon(Icons.person, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   @override
@@ -99,10 +113,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               key: const Key('create_account_button'),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SingupPage()));
+                Get.to(() => const SingupPage());
               },
               child: const Text('Create Account'),
             ),

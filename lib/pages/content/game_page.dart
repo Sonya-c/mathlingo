@@ -15,12 +15,6 @@ class _GamePageState extends State<GamePage> {
     return ResponsiveContainer(
         appBar: AppBar(
           title: const Text('Mathlingo'),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.logout),
-            )
-          ],
         ),
         children: [Question(num1: 1, num2: 2, op: "+")]);
   }

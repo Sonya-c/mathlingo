@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
+import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/pages/auth/login_page.dart';
 import 'package:mathlingo/widgets/ResponsiveContainer.dart';
 
@@ -16,15 +18,30 @@ class _SingupPageState extends State<SingupPage> {
   final controllerSchool = TextEditingController(text: '');
   final controllerPassword = TextEditingController(text: '');
 
-  _singup(theEmail, thePassword) async {
-    print('_singup $theEmail $thePassword');
+  AuthenticationController authenticationController = Get.find();
 
-    Get.snackbar(
-      "Login Failed",
-      "Invalid email or password",
-      icon: const Icon(Icons.person, color: Colors.red),
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  _singup(email, password) async {
+    logInfo('_singup $email $password');
+
+    try {
+      await authenticationController.signUp(email, password);
+      logInfo("_singup [sucess]");
+      Get.snackbar(
+        "Sign Up sucessfull",
+        '',
+        icon: const Icon(Icons.person, color: Colors.green),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (error) {
+      logError("_sinup [failed]: $error");
+
+      Get.snackbar(
+        "Sing up failed",
+        error.toString(),
+        icon: const Icon(Icons.person, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   @override
@@ -129,10 +146,7 @@ class _SingupPageState extends State<SingupPage> {
               TextButton(
                 key: const Key('login_button'),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
+                  Get.back();
                 },
                 child: const Text('Have an account? Login'),
               ),

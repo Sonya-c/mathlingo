@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/widgets/stats_widget.dart';
 import '../../widgets/ResponsiveContainer.dart';
 import 'game_page.dart';
@@ -11,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthenticationController authenticationController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(
@@ -18,7 +22,9 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Mathlingo'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await authenticationController.logOut();
+            },
             icon: const Icon(Icons.logout),
           )
         ],
