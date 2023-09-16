@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Mathlingo'),
         actions: [
           IconButton(
+            key: const Key("home_page_retun_button"),
             onPressed: () async {
               await authenticationController.logOut();
             },
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
       ),
       children: [
         FilledButton(
+          key: const Key("home_page_play_button"),
           onPressed: () {
             Get.to(() => const GamePage());
           },
