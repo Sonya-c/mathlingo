@@ -4,7 +4,7 @@ import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/pages/auth/singup_page.dart';
 
-import '../../widgets/ResponsiveContainer.dart';
+import '../../widgets/center_container.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

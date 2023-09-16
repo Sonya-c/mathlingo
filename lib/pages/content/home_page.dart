@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/widgets/stats_widget.dart';
-import '../../widgets/ResponsiveContainer.dart';
+import '../../widgets/center_container.dart';
 import 'game_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(
           height: 20,
         ),
-        ElevatedButton(
+        FilledButton(
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const GamePage()));

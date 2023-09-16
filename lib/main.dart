@@ -33,15 +33,14 @@ class MyApp extends StatelessWidget {
     AuthenticationController authenticationController = Get.find();
 
     return GetMaterialApp(
-      title: 'Mathlingo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Obx(() => authenticationController.isLogged
-          ? const HomePage()
-          : const LoginPage()),
-    );
+        title: 'Mathlingo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: Obx(() => authenticationController.isLogged
+            ? const HomePage()
+            : const LoginPage()));
   }
 }
