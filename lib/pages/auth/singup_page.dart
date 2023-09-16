@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
-import 'package:mathlingo/widgets/center_container.dart';
+import 'package:mathlingo/widgets/responsive_container.dart';
 
 class SingupPage extends StatefulWidget {
   const SingupPage({super.key});

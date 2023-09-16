@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
-import 'package:mathlingo/widgets/stats_widget.dart';
-import '../../widgets/center_container.dart';
+import '../../widgets/responsive_container.dart';
 import 'game_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,16 +29,30 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       children: [
-        const Stats(),
-        const SizedBox(
-          height: 20,
-        ),
         FilledButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const GamePage()));
-            },
-            child: const Text("Play"))
+          onPressed: () {
+            Get.to(() => const GamePage());
+          },
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(
+              Colors.orange,
+            ),
+            padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(
+              30,
+              15,
+              30,
+              15,
+            )),
+          ),
+          child: const Text(
+            "Play",
+            style: TextStyle(fontSize: 30),
+          ),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        const Placeholder()
       ],
     );
   }

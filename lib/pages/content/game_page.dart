@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mathlingo/widgets/center_container.dart';
+import 'package:mathlingo/widgets/responsive_container.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
