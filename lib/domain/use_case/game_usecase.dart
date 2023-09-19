@@ -1,0 +1,12 @@
+import '../repositories/game_repository.dart';
+
+class GameUseCase {
+  final GameRepository _gameRepository;
+  GameUseCase(this._gameRepository);
+
+  Future<MathProblem> generateProblem() async => await _gameRepository.generateProblem();
+
+  Future<bool> verifyAnswer(int answer, Duration timeTaken) async {
+    return await _gameRepository.verifyAnswer(answer, timeTaken);
+  }
+}
