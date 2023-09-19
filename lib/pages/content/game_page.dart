@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:mathlingo/widgets/correct_ans_modal.dart';
 import 'package:mathlingo/widgets/responsive_container.dart';
+import '../../controller/game_controller.dart';
+import '../../domain/repositories/game_repository.dart';
+import '../../domain/use_case/game_usecase.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -16,6 +19,23 @@ class _GamePageState extends State<GamePage> {
   final random = Random();
 
   String answer = "";
+
+  final _gameController = GameController(GameUseCase(GameRepository()));
+
+  MathProblem _question = MathProblem(0, 0, "+", 0);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProblem();
+  }
+
+  void _loadProblem() async {
+    MathProblem question = await _gameController.generateProblem();
+    setState(() {
+      _question = question;
+    });
+  }
 
   _updateAnswer(String num) {
     setState(() {
@@ -30,89 +50,26 @@ class _GamePageState extends State<GamePage> {
   }
 
   _submmitAnswer(BuildContext context) {
+    // TODO: check if answer if correct
     bool isCorrect = random.nextBool();
-    MaterialColor acentColor = isCorrect ? Colors.green : Colors.red;
 
     showModalBottomSheet(
       context: context,
       elevation: 10,
-      backgroundColor: acentColor[200],
-      builder: (context) => SizedBox(
-        height: 250,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  isCorrect ? "Correct" : "Incorrect",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: acentColor[900]),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Text(
-                      "Correct answer: ",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: acentColor[800]),
-                    ),
-                    Text(
-                      answer,
-                      style: TextStyle(fontSize: 20, color: acentColor[800]),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Your answer: ",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: acentColor[800]),
-                    ),
-                    Text(
-                      answer,
-                      style: TextStyle(fontSize: 20, color: acentColor[800]),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                FilledButton(
-                  style: ButtonStyle(
-                    padding: const MaterialStatePropertyAll(
-                      EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    ),
-                    backgroundColor: MaterialStatePropertyAll(acentColor[800]),
-                  ),
-                  onPressed: () {
-                    Get.back(); // close
-                  },
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+      // backgroundColor: acentColor[200],
+      builder: (context) => CorrectAnswer(
+        isCorrect: isCorrect,
+        answer: answer,
       ),
     );
+    // TODO: change answer/total answer review
   }
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(
       appBar: AppBar(
-        title: const Text('Quiz: question 1 /10'),
+        title: const Text('Quiz: question 1/10'),
       ),
       children: [
         SingleChildScrollView(
@@ -122,9 +79,9 @@ class _GamePageState extends State<GamePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Text(
-                "1 + 1 = ",
-                style: TextStyle(fontSize: 50),
+              Text(
+                "${_question.num1} ${_question.op} ${_question.num2} =",
+                style: const TextStyle(fontSize: 50),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
