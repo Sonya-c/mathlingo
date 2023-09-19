@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CorrectAnswer extends StatelessWidget {
-  bool isCorrect;
-  String answer;
+  final bool isCorrect;
+  final String answer;
 
-  CorrectAnswer({
+  const CorrectAnswer({
     super.key,
     required this.isCorrect,
     required this.answer,

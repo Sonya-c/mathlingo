@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mathlingo/widgets/correct_ans_modal.dart';
 import 'package:mathlingo/widgets/responsive_container.dart';
 import '../../controller/game_controller.dart';
