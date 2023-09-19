@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 class CorrectAnswer extends StatelessWidget {
   final bool isCorrect;
   final String answer;
+  final Duration time;
 
   const CorrectAnswer({
     super.key,
     required this.isCorrect,
     required this.answer,
+    required this.time,
   });
 
   @override
@@ -32,6 +34,14 @@ class CorrectAnswer extends StatelessWidget {
                     color: acentColor[900]),
               ),
               const SizedBox(height: 10),
+              Text(
+                "Time: ${time.inMinutes}:${time.inSeconds}",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: acentColor[800]),
+              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
