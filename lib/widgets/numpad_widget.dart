@@ -19,7 +19,7 @@ class Numpad extends StatelessWidget {
         if (index <= 9) {
           updateAnswer(index.toString());
         } else if (index == 10) {
-          updateAnswer();
+          clearAnswer();
         } else {
           submmitAnswer();
         }

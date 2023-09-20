@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:loggy/loggy.dart';
+
 class GameRepository {
   late MathProblem _currentProblem;
   List<MathAnswer> mathAnswers = [];
@@ -34,10 +36,10 @@ class GameRepository {
   }
 
   MathProblem _generateRandomProblem() {
-    final num1 = _random.nextInt(10); // generates a random integer from 0 to 9
-    final num2 = _random.nextInt(10);
-    final ops = ["+", "-", "*"];
-    final op = ops[_random.nextInt(ops.length)]; // selects a random operation
+    var num1 = _random.nextInt(10); // generates a random integer from 0 to 9
+    var num2 = _random.nextInt(10);
+    var ops = ["+", "-", "*"];
+    var op = ops[_random.nextInt(ops.length)]; // selects a random operation
 
     int answer;
     switch (op) {
@@ -45,6 +47,10 @@ class GameRepository {
         answer = num1 + num2;
         break;
       case "-":
+        if (num1 < num2) {
+          [num1, num2] = [num2, num1]; // lol, find a pythonic swap
+          logInfo("swap");
+        }
         answer = num1 - num2;
         break;
       case "*":
