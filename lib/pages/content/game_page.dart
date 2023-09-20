@@ -85,7 +85,10 @@ class _GamePageState extends State<GamePage> {
     );
 
     setState(() {
-      totalTime = totalTime + stopwatch.elapsed;
+      totalTime = Duration(
+        minutes: totalTime.inMinutes + stopwatch.elapsed.inMinutes,
+        seconds: totalTime.inSeconds + stopwatch.elapsed.inSeconds,
+      );
       numQuestions++;
       if (isCorrect) {
         correctAnswers++;
@@ -117,7 +120,7 @@ class _GamePageState extends State<GamePage> {
     return ResponsiveContainer(
       appBar: AppBar(
         title: Text(
-          'Quiz: question $numQuestions/6',
+          (numQuestions <= 6) ? 'Quiz: question $numQuestions/6' : 'Quiz',
           key: const Key("game_page_appbar_title"),
         ),
       ),
