@@ -52,7 +52,7 @@ class _GamePageState extends State<GamePage> {
     });
   }
 
-  _submmitAnswer(BuildContext context) async {
+  _submmitAnswer() async {
     if (answer.isEmpty) {
       Get.snackbar(
         "Missing answer!",
@@ -165,17 +165,20 @@ class _GamePageState extends State<GamePage> {
                               result.mathProblem.toString() +
                                   result.mathProblem.answer.toString(),
                               style: const TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Expanded(
                               child: Text(
                             result.isCorrect ? "Correct" : "Incorrect",
                             style: const TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
                           )),
                           Expanded(
                               child: Text(
                             "Time ${result.duration.inMinutes}:${result.duration.inSeconds}",
                             style: const TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
                           )),
                         ],
                       ),
