@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PanelWidget extends StatelessWidget {
-  final int num1, num2;
-  final String op, answer;
+  final String question, answer;
 
   const PanelWidget({
     super.key,
-    required this.num1,
-    required this.num2,
-    required this.op,
+    required this.question,
     required this.answer,
   });
 
@@ -23,7 +20,7 @@ class PanelWidget extends StatelessWidget {
         children: [
           Text(
             key: const Key("panel_widget_question"),
-            "$num1 $op $num2 =",
+            question,
             style: const TextStyle(fontSize: 50),
           ),
           Container(

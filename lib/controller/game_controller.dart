@@ -15,4 +15,12 @@ class GameController {
   Future<int> getAnswer() async {
     return await _gameUseCase.getAnswer();
   }
+
+  Future<void> clearAnswers() async {
+    return await _gameUseCase.clearAnswers();
+  }
+
+  Future<List<MathAnswer>> getAnswers() async {
+    return await _gameUseCase.getAnswers();
+  }
 }

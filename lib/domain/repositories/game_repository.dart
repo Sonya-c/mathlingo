@@ -2,6 +2,8 @@ import 'dart:math';
 
 class GameRepository {
   late MathProblem _currentProblem;
+  List<MathAnswer> mathAnswers = [];
+
   final _random = Random();
 
   GameRepository() {
@@ -14,11 +16,21 @@ class GameRepository {
   }
 
   Future<bool> verifyAnswer(int answer, Duration timeTaken) async {
-    return answer == _currentProblem.answer;
+    bool isCorrect = answer == _currentProblem.answer;
+    mathAnswers.add(MathAnswer(_currentProblem, timeTaken, isCorrect));
+    return isCorrect;
   }
 
   Future<int> getAnswer() async {
     return _currentProblem.answer;
+  }
+
+  Future<void> clearAnswers() async {
+    mathAnswers = [];
+  }
+
+  Future<List<MathAnswer>> getAnswers() async {
+    return mathAnswers;
   }
 
   MathProblem _generateRandomProblem() {
@@ -51,4 +63,17 @@ class MathProblem {
   final String op;
 
   MathProblem(this.num1, this.num2, this.op, this.answer);
+
+  @override
+  String toString() {
+    return "$num1 $op $num2 = ";
+  }
+}
+
+class MathAnswer {
+  final MathProblem mathProblem;
+  final Duration duration;
+  final bool isCorrect;
+
+  MathAnswer(this.mathProblem, this.duration, this.isCorrect);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loggy/loggy.dart';
 import 'package:mathlingo/widgets/correct_ans_modal.dart';
 import 'package:mathlingo/widgets/numpad_widget.dart';
 import 'package:mathlingo/widgets/panel_widget.dart';
@@ -22,7 +21,7 @@ class _GamePageState extends State<GamePage> {
 
   String answer = "";
   int numQuestions = 1;
-  List<List<dynamic>> results = [];
+  List<MathAnswer> results = [];
 
   MathProblem _question = MathProblem(0, 0, "+", 0);
 
@@ -92,15 +91,9 @@ class _GamePageState extends State<GamePage> {
       _loadProblem();
       _clearAnswer();
     } else {
-      // TODO: Generate results
-      results = [
-        ["1+1=3", true, 1.2],
-        ["1+1=3", true, 1.2],
-        ["1+1=3", false, 1.2],
-        ["1+1=3", true, 1.2],
-        ["1+1=3", false, 1.2],
-        ["1+1=3", true, 1.2],
-      ];
+      results = await _gameController.getAnswers();
+
+      _gameController.clearAnswers();
     }
   }
 
@@ -125,9 +118,7 @@ class _GamePageState extends State<GamePage> {
       children: (numQuestions < 6)
           ? ([
               PanelWidget(
-                num1: _question.num1,
-                num2: _question.num2,
-                op: _question.op,
+                question: _question.toString(),
                 answer: answer,
               ),
               const SizedBox(
@@ -167,20 +158,25 @@ class _GamePageState extends State<GamePage> {
                     .map(
                       (result) => Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            result[0].toString(),
-                            style: const TextStyle(fontSize: 20),
+                          Expanded(
+                            child: Text(
+                              result.mathProblem.toString() +
+                                  result.mathProblem.answer.toString(),
+                              style: const TextStyle(fontSize: 20),
+                            ),
                           ),
-                          Text(
-                            result[1] ? "Correct" : "Incorrect",
+                          Expanded(
+                              child: Text(
+                            result.isCorrect ? "Correct" : "Incorrect",
                             style: const TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            "Time: ${result[2]}",
+                          )),
+                          Expanded(
+                              child: Text(
+                            "Time ${result.duration.inMinutes}:${result.duration.inSeconds}",
                             style: const TextStyle(fontSize: 20),
-                          ),
+                          )),
                         ],
                       ),
                     )
