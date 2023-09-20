@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 
 class CorrectAnswer extends StatelessWidget {
   final bool isCorrect;
-  final String answer;
+  final String answer, correctAnswer;
   final Duration time;
 
   const CorrectAnswer({
     super.key,
     required this.isCorrect,
     required this.answer,
+    required this.correctAnswer,
     required this.time,
   });
 
@@ -52,7 +53,7 @@ class CorrectAnswer extends StatelessWidget {
                         color: acentColor[800]),
                   ),
                   Text(
-                    answer,
+                    correctAnswer,
                     style: TextStyle(fontSize: 20, color: acentColor[800]),
                   ),
                 ],

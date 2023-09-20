@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
 import 'package:mathlingo/widgets/correct_ans_modal.dart';
 import 'package:mathlingo/widgets/numpad_widget.dart';
 import 'package:mathlingo/widgets/panel_widget.dart';
@@ -18,7 +17,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final random = Random();
   final _gameController = GameController(GameUseCase(GameRepository()));
   final Stopwatch stopwatch = Stopwatch();
 
@@ -64,17 +62,23 @@ class _GamePageState extends State<GamePage> {
       );
       return;
     }
-    // TODO: check if answer if correct
-    bool isCorrect = random.nextBool();
-
     stopwatch.stop();
 
+    bool isCorrect = await _gameController.verifyAnswer(
+      int.parse(answer),
+      stopwatch.elapsed,
+    );
+
+    String correctAnswer = (await _gameController.getAnswer()).toString();
+
+    // ignore: use_build_context_synchronously
     await showModalBottomSheet(
       context: context,
       elevation: 10,
       // backgroundColor: acentColor[200],
       builder: (context) => CorrectAnswer(
         isCorrect: isCorrect,
+        correctAnswer: correctAnswer,
         answer: answer,
         time: stopwatch.elapsed,
       ),
@@ -83,6 +87,7 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       numQuestions++;
     });
+
     if (numQuestions < 6) {
       _loadProblem();
       _clearAnswer();

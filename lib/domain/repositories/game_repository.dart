@@ -17,6 +17,10 @@ class GameRepository {
     return answer == _currentProblem.answer;
   }
 
+  Future<int> getAnswer() async {
+    return _currentProblem.answer;
+  }
+
   MathProblem _generateRandomProblem() {
     final num1 = _random.nextInt(10); // generates a random integer from 0 to 9
     final num2 = _random.nextInt(10);
