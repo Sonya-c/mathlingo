@@ -7,6 +7,9 @@ class GameRepository {
   List<MathAnswer> mathAnswers = [];
 
   final _random = Random();
+  int next(int min, int max) => min + _random.nextInt(max - min);
+
+  int _level = 1;
 
   GameRepository() {
     _currentProblem = _generateRandomProblem();
@@ -35,25 +38,65 @@ class GameRepository {
     return mathAnswers;
   }
 
-  MathProblem _generateRandomProblem() {
-    var num1 = _random.nextInt(10); // generates a random integer from 0 to 9
-    var num2 = _random.nextInt(10);
-    var ops = ["+", "-", "*"];
-    var op = ops[_random.nextInt(ops.length)]; // selects a random operation
+  Future<int> getLevel() async {
+    return _level;
+  }
 
-    int answer;
+  Future<int> levelUp() async {
+    int totalCorrectAnswers = 0;
+    for (MathAnswer ans in mathAnswers) {
+      if (ans.isCorrect) totalCorrectAnswers++;
+    }
+
+    if (totalCorrectAnswers > mathAnswers.length ~/ 2) {
+      _level++;
+      return 1;
+    } else if (totalCorrectAnswers < mathAnswers.length ~/ 2) {
+      // to level down it must be less (not equal)
+      if (_level > 1) _level--;
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  MathProblem _generateRandomProblem() {
+    var operations = ["+", "-", "*"];
+    // _level = # digits * operation dificulty factor
+    // selects a random operation
+    // each operation have a dificulty factor
+    // +: 1; -: 2; *: 3;
+    String op = operations[next(0, _level <= 3 ? _level : 3)];
+
+    int num1, num2, answer, digits;
+
     switch (op) {
-      case "+":
+      case "+": // dificulty factor = 1
+        digits = _level ~/ 1;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
         answer = num1 + num2;
         break;
-      case "-":
+      case "-": // dificulty factor = 2
+        digits = _level ~/ 2;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
         if (num1 < num2) {
           [num1, num2] = [num2, num1]; // lol, find a pythonic swap
           logInfo("swap");
         }
         answer = num1 - num2;
         break;
-      case "*":
+      case "*": // dificulty factor = 3
+        digits = _level ~/ 3;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
         answer = num1 * num2;
         break;
       default:

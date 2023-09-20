@@ -16,15 +16,17 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final _gameController = GameController(GameUseCase(GameRepository()));
+  final GameController _gameController = Get.find();
   final Stopwatch stopwatch = Stopwatch();
 
   String answer = "";
   int numQuestions = 1;
   int correctAnswers = 0;
-  List<MathAnswer> results = [];
+  int levelUp = 0;
   Duration totalTime = const Duration(minutes: 0, seconds: 0);
+
   MathProblem _question = MathProblem(0, 0, "+", 0);
+  List<MathAnswer> results = [];
 
   @override
   void initState() {
@@ -55,13 +57,10 @@ class _GamePageState extends State<GamePage> {
 
   _submmitAnswer() async {
     if (answer.isEmpty) {
-      Get.snackbar(
-        "Missing answer!",
-        "You must enter an answer",
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Missing answer!", "You must enter an answer");
       return;
     }
+
     stopwatch.stop();
 
     bool isCorrect = await _gameController.verifyAnswer(
@@ -90,9 +89,8 @@ class _GamePageState extends State<GamePage> {
         seconds: totalTime.inSeconds + stopwatch.elapsed.inSeconds,
       );
       numQuestions++;
-      if (isCorrect) {
-        correctAnswers++;
-      }
+
+      if (isCorrect) correctAnswers++;
     });
 
     if (numQuestions <= 6) {
@@ -100,19 +98,20 @@ class _GamePageState extends State<GamePage> {
       _clearAnswer();
     } else {
       results = await _gameController.getAnswers();
-      _gameController.clearAnswers();
+      levelUp = await _gameController.levelUp();
+      await _gameController.clearAnswers();
     }
   }
 
   void _resetGame() {
-    _loadProblem();
-
     setState(() {
       numQuestions = 1;
       answer = "";
       correctAnswers = 0;
       totalTime = const Duration(minutes: 0, seconds: 0);
     });
+
+    _loadProblem();
   }
 
   @override
@@ -146,6 +145,20 @@ class _GamePageState extends State<GamePage> {
               ),
               const SizedBox(
                 height: 25,
+              ),
+              Text(
+                levelUp == 1
+                    ? "You have level up!"
+                    : levelUp == 0
+                        ? "Well done, keep praticing"
+                        : "You have level down :'c",
+                style: const TextStyle(
+                  fontSize: 25,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Text(
                 "Correct answers $correctAnswers/6",
@@ -221,7 +234,7 @@ class _GamePageState extends State<GamePage> {
               OutlinedButton(
                 key: const Key("game_page_returnhome_button"),
                 onPressed: () {
-                  Get.back();
+                  Get.back(result: true);
                 },
                 style: const ButtonStyle(
                   padding: MaterialStatePropertyAll(

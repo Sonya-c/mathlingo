@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
+import 'package:mathlingo/controller/game_controller.dart';
 import '../../widgets/responsive_container.dart';
 import 'game_page.dart';
 
@@ -13,6 +15,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthenticationController authenticationController = Get.find();
+  GameController gameController = Get.find();
+  int level = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getLevel();
+  }
+
+  _getLevel() async {
+    level = await gameController.getLevel();
+    setState(() {
+      level = level;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +47,13 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       children: [
+        Text("Level $level"),
         FilledButton(
           key: const Key("home_page_play_button"),
-          onPressed: () {
-            Get.to(() => const GamePage());
+          onPressed: () async {
+            var response = await Get.to(() => const GamePage());
+            logInfo(response);
+            if (response) await _getLevel();
           },
           style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
@@ -53,8 +73,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(
           height: 25,
-        ),
-        const Placeholder()
+        )
       ],
     );
   }

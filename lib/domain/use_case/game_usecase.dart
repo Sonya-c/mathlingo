@@ -1,8 +1,9 @@
+import 'package:get/get.dart';
+
 import '../repositories/game_repository.dart';
 
 class GameUseCase {
-  final GameRepository _gameRepository;
-  GameUseCase(this._gameRepository);
+  final GameRepository _gameRepository = Get.find();
 
   Future<MathProblem> generateProblem() async =>
       await _gameRepository.generateProblem();
@@ -21,5 +22,13 @@ class GameUseCase {
 
   Future<List<MathAnswer>> getAnswers() async {
     return await _gameRepository.getAnswers();
+  }
+
+  Future<int> levelUp() async {
+    return await _gameRepository.levelUp();
+  }
+
+  Future<int> getLevel() async {
+    return await _gameRepository.getLevel();
   }
 }
