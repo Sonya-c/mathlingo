@@ -21,8 +21,9 @@ class _GamePageState extends State<GamePage> {
 
   String answer = "";
   int numQuestions = 1;
+  int correctAnswers = 0;
   List<MathAnswer> results = [];
-
+  Duration totalTime = const Duration(minutes: 0, seconds: 0);
   MathProblem _question = MathProblem(0, 0, "+", 0);
 
   @override
@@ -84,15 +85,18 @@ class _GamePageState extends State<GamePage> {
     );
 
     setState(() {
+      totalTime = totalTime + stopwatch.elapsed;
       numQuestions++;
+      if (isCorrect) {
+        correctAnswers++;
+      }
     });
 
-    if (numQuestions < 6) {
+    if (numQuestions <= 6) {
       _loadProblem();
       _clearAnswer();
     } else {
       results = await _gameController.getAnswers();
-
       _gameController.clearAnswers();
     }
   }
@@ -103,6 +107,8 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       numQuestions = 1;
       answer = "";
+      correctAnswers = 0;
+      totalTime = const Duration(minutes: 0, seconds: 0);
     });
   }
 
@@ -115,7 +121,7 @@ class _GamePageState extends State<GamePage> {
           key: const Key("game_page_appbar_title"),
         ),
       ),
-      children: (numQuestions < 6)
+      children: (numQuestions <= 6)
           ? ([
               PanelWidget(
                 question: _question.toString(),
@@ -138,16 +144,16 @@ class _GamePageState extends State<GamePage> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
-                "Correct answers 1/6",
-                style: TextStyle(fontSize: 25),
+              Text(
+                "Correct answers $correctAnswers/6",
+                style: const TextStyle(fontSize: 25),
               ),
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                "Total time 10:12",
-                style: TextStyle(fontSize: 25),
+              Text(
+                "Total time ${totalTime.inMinutes}:${totalTime.inSeconds}",
+                style: const TextStyle(fontSize: 25),
               ),
               const SizedBox(
                 height: 25,
