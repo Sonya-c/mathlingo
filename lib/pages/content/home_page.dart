@@ -5,6 +5,7 @@ import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/controller/game_controller.dart';
 import '../../widgets/responsive_container.dart';
 import 'game_page.dart';
+import 'package:mathlingo/domain/models/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //§User user = Get.arguments[0];
   AuthenticationController authenticationController = Get.find();
   GameController gameController = Get.find();
   int level = 0;
