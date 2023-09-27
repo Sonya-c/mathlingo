@@ -10,7 +10,7 @@ class Repository {
 
   // the base url of the API should end without the /
   final String _baseUrl =
-      "http://ip172-18-0-132-ck9e5qogftqg00avpj1g-8000.direct.labs.play-with-docker.com";
+      "http://ip172-18-0-73-cka46amfml8g00an1gc0-8000.direct.labs.play-with-docker.com";
 
   Repository() {
     _authenticationDataSource = AuthenticationDatatasource();

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mathlingo/controller/game_session_controller.dart';
+import 'package:mathlingo/domain/models/game_session.dart';
 import 'package:mathlingo/widgets/correct_ans_modal.dart';
 import 'package:mathlingo/widgets/numpad_widget.dart';
 import 'package:mathlingo/widgets/panel_widget.dart';
 import 'package:mathlingo/widgets/responsive_container.dart';
+import '../../controller/authentication_controller.dart';
 import '../../controller/game_controller.dart';
-import '../../domain/repositories/game_repository.dart';
-import '../../domain/use_case/game_usecase.dart';
+import '../../domain/models/game_answers.dart';
+import '../../domain/models/math_problem.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+  final updateHome;
+
+  const GamePage({super.key, required this.updateHome});
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -17,6 +22,9 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   final GameController _gameController = Get.find();
+  final AuthenticationController _authenticationController = Get.find();
+  final GameSessionController _gameSessionController = Get.find();
+
   final Stopwatch stopwatch = Stopwatch();
 
   String answer = "";
@@ -31,6 +39,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
+    _gameController.clearAnswers();
     _loadProblem();
   }
 
@@ -97,8 +106,19 @@ class _GamePageState extends State<GamePage> {
       _loadProblem();
       _clearAnswer();
     } else {
+      _gameSessionController.addGameSession(
+        GameSession(
+          userEmail: _authenticationController.getEmail,
+          duration: totalTime,
+          correctAnwers: correctAnswers,
+          level: await _gameController.getLevel(),
+        ),
+      );
+
       results = await _gameController.getAnswers();
       levelUp = await _gameController.levelUp();
+      widget.updateHome();
+
       await _gameController.clearAnswers();
     }
   }

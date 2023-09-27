@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 
 import '../../domain/use_case/game_usecase.dart';
-import '../../domain/repositories/game_repository.dart';
+import '../domain/models/game_answers.dart';
+import '../domain/models/math_problem.dart';
 
 class GameController {
   final GameUseCase _gameUseCase = Get.find();
@@ -31,5 +32,9 @@ class GameController {
 
   Future<int> getLevel() async {
     return await _gameUseCase.getLevel();
+  }
+
+  Future<void> setLevel(int level) async {
+    return await _gameUseCase.setLevel(level);
   }
 }

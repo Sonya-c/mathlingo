@@ -28,16 +28,14 @@ class _SingupPageState extends State<SingupPage> {
     logInfo('_singup $email $password');
 
     try {
-
-            await userController.addUser(User(
-            email: email,
-            school: school,
-            grade: grade,
-            dateString: date,));
+      await userController.addUser(User(
+        email: email,
+        school: school,
+        grade: grade,
+        dateString: date,
+      ));
       await authenticationController.signUp(email, password);
       logInfo("_singup [sucess]");
-
-
 
       Get.snackbar(
         "Sign Up sucessfull",
@@ -181,7 +179,14 @@ class _SingupPageState extends State<SingupPage> {
                   form!.save();
                   if (_formKey.currentState!.validate()) {
                     await _singup(
-                        controllerEmail.text, controllerSchool.text, int.parse(controllerGrade.text), selectedDate.toString(), controllerPassword.text, userController);
+                        controllerEmail.text,
+                        controllerSchool.text,
+                        int.parse(controllerGrade.text),
+                        DateFormat('yyyy-MM-dd')
+                            .format(selectedDate!)
+                            .toString(),
+                        controllerPassword.text,
+                        userController);
                   }
                 },
                 child: const Text('Create account'),

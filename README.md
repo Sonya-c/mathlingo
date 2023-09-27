@@ -6,9 +6,13 @@
 
 Requerimientos.
 
+~~~
+
+~~~
+
 - flutter.  
 - android studio.  
-
+cooo
 Clonar el proyecto.  
 
 ~~~cmd
@@ -18,7 +22,7 @@ git clone https://github.com/Sonya-c/mathlingo.git
 Descargar las dependencias.  
 
 ~~~cmd
-flutter flutter pud
+flutter pud get
 ~~~
 
 Ejecutar el programa utilizando un emulador.  
