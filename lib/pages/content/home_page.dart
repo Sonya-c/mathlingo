@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _getLevel();
+    // _getLevel();
   }
 
   _getLevel() async {
@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage> {
     return ResponsiveContainer(
       appBar: AppBar(
         title: const Text('Mathlingo'),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.deepPurple,
         actions: [
           IconButton(
             key: const Key("home_page_retun_button"),
@@ -55,29 +57,48 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+      backgroundColor: Colors.deepPurple[50],
       children: [
+        const Text(
+          "Welcome!",
+          style: TextStyle(
+            fontSize: 24,
+          ),
+        ),
+        Text(
+          (widget.email).isEmpty ? "Quest" : widget.email,
+          style: const TextStyle(fontSize: 20),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
         Obx(
-          () => Text("Level ${_gameController.level}"),
+          () => Text(
+            "Level ${_gameController.level}",
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 25,
         ),
         FilledButton(
           key: const Key("home_page_play_button"),
           onPressed: () async {
             Get.to(() => const GamePage());
           },
-          style: const ButtonStyle(
+          style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
-              Colors.orange,
+              Colors.orange[700],
             ),
-            padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(
-              30,
-              15,
-              30,
-              15,
-            )),
+            padding: const MaterialStatePropertyAll(
+              EdgeInsets.fromLTRB(30, 15, 30, 15),
+            ),
           ),
           child: const Text(
             "Play",
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 20),
           ),
         ),
         const SizedBox(
