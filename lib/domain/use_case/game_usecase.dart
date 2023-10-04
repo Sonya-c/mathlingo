@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
+import 'package:mathlingo/domain/models/game_session.dart';
 
 import '../models/game_answers.dart';
 import '../models/math_problem.dart';
@@ -12,15 +14,67 @@ class GameUseCase {
   final _random = Random();
   int next(int min, int max) => min + _random.nextInt(max - min);
 
-  int _level = 1;
+  final level = 1.obs;
 
   GameUseCase() {
+    init();
+  }
+
+  Future<void> init() async {
     _currentProblem = _generateRandomProblem();
+    mathAnswers = [];
+    level.value = 1;
   }
 
   Future<MathProblem> generateProblem() async {
     _currentProblem = _generateRandomProblem();
     return _currentProblem;
+  }
+
+  MathProblem _generateRandomProblem() {
+    var operations = ["+", "-", "*"];
+    // level = # digits * operation dificulty factor
+    // selects a random operation
+    // each operation have a dificulty factor
+    // +: 1; -: 2; *: 3;
+    String op = operations[next(0, level.value <= 3 ? level.value : 3)];
+
+    int num1, num2, answer, digits;
+
+    switch (op) {
+      case "+": // dificulty factor = 1
+        digits = level ~/ 1;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
+        answer = num1 + num2;
+        break;
+      case "-": // dificulty factor = 2
+        digits = level ~/ 2;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
+        if (num1 < num2) {
+          [num1, num2] = [num2, num1]; // lol, find a pythonic swap
+          logInfo("swap");
+        }
+        answer = num1 - num2;
+        break;
+      case "*": // dificulty factor = 3
+        digits = level ~/ 3;
+
+        num1 = next(10 * (digits - 1), 10 * digits);
+        num2 = next(10 * (digits - 1), 10 * digits);
+
+        answer = num1 * num2;
+        break;
+      default:
+        throw Exception("Unknown operation");
+    }
+
+    return MathProblem(num1, num2, op, answer);
   }
 
   Future<bool> verifyAnswer(int answer, Duration timeTaken) async {
@@ -33,20 +87,12 @@ class GameUseCase {
     return _currentProblem.answer;
   }
 
-  Future<void> clearAnswers() async {
-    mathAnswers = [];
-  }
-
   Future<List<MathAnswer>> getAnswers() async {
     return mathAnswers;
   }
 
-  Future<int> getLevel() async {
-    return _level;
-  }
-
-  Future<void> setLevel(int level) async {
-    _level = level;
+  Future<void> clearAnswers() async {
+    mathAnswers = [];
   }
 
   Future<int> levelUp() async {
@@ -56,60 +102,25 @@ class GameUseCase {
     }
 
     if (totalCorrectAnswers > mathAnswers.length ~/ 2) {
-      _level++;
+      level.value++;
       return 1;
     } else if (totalCorrectAnswers < mathAnswers.length ~/ 2) {
       // to level down it must be less (not equal)
-      if (_level > 1) _level--;
+      if (level > 1) level.value--;
       return -1;
     } else {
       return 0;
     }
   }
 
-  MathProblem _generateRandomProblem() {
-    var operations = ["+", "-", "*"];
-    // _level = # digits * operation dificulty factor
-    // selects a random operation
-    // each operation have a dificulty factor
-    // +: 1; -: 2; *: 3;
-    String op = operations[next(0, _level <= 3 ? _level : 3)];
+  Future<void> retriveLevel(GameSession gameSession) async {
+    level.value = gameSession.level;
 
-    int num1, num2, answer, digits;
-
-    switch (op) {
-      case "+": // dificulty factor = 1
-        digits = _level ~/ 1;
-
-        num1 = next(10 * (digits - 1), 10 * digits);
-        num2 = next(10 * (digits - 1), 10 * digits);
-
-        answer = num1 + num2;
-        break;
-      case "-": // dificulty factor = 2
-        digits = _level ~/ 2;
-
-        num1 = next(10 * (digits - 1), 10 * digits);
-        num2 = next(10 * (digits - 1), 10 * digits);
-
-        if (num1 < num2) {
-          [num1, num2] = [num2, num1]; // lol, find a pythonic swap
-          logInfo("swap");
-        }
-        answer = num1 - num2;
-        break;
-      case "*": // dificulty factor = 3
-        digits = _level ~/ 3;
-
-        num1 = next(10 * (digits - 1), 10 * digits);
-        num2 = next(10 * (digits - 1), 10 * digits);
-
-        answer = num1 * num2;
-        break;
-      default:
-        throw Exception("Unknown operation");
+    if (gameSession.correctAnwers > mathAnswers.length ~/ 2) {
+      level.value = level.value++;
+    } else if (gameSession.correctAnwers < mathAnswers.length ~/ 2) {
+      // to level down it must be less (not equal)
+      if (level.value > 1) level.value--;
     }
-
-    return MathProblem(num1, num2, op, answer);
   }
 }

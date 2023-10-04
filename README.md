@@ -6,42 +6,53 @@
 
 Requerimientos.
 
-~~~
-
-~~~
-
 - flutter.  
 - android studio.  
 cooo
 Clonar el proyecto.  
 
-~~~cmd
+~~~bash
 git clone https://github.com/Sonya-c/mathlingo.git
 ~~~
 
 Descargar las dependencias.  
 
-~~~cmd
+~~~bash
 flutter pud get
 ~~~
 
+Ejecutar el servidor de autenticación. Ir a [Play with docker](https://labs.play-with-docker.com/)
+
+~~~bash
+git clone https://github.com/augustosalazar/p_auth_server.git
+cd p_auth_server
+docker run -d -it -p 8000:8000 augustosalazar/authi:1
+~~~
+
+Luego de abir el puerto 800, copiar la url y cambiar `_baseUrl` en [repository](lib/domain/repositories/repository.dart)
+
 Ejecutar el programa utilizando un emulador.  
 
-~~~cmd
+~~~bash
 flutter run android
 ~~~
 
 O conectador a un movíl fisico.  
 
-~~~cmd
+~~~bash
 flutter run -d [device-id]
 ~~~
 
 Para buscar el id de tu dispositivo ejecuta.  
 
-~~~cmd
+~~~bash
 flutter devices 
 ~~~
+
+Tablas:  
+
+- [Usuarios](https://retoolapi.dev/sis9CV/data)
+- [Secciones de juego](https://retoolapi.dev/IbOEmd/data)
 
 ## UI  
 

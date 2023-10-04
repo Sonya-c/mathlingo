@@ -21,13 +21,17 @@ void main() async {
     ),
   );
 
+  // Authentication
   Get.put(Repository());
   Get.put(AuthenticationUseCase());
-  Get.put(UserUseCase());
   Get.put(AuthenticationController());
+  // User controller
+  Get.put(UserUseCase());
   Get.put(UserController());
+  // Game controller
   Get.put(GameUseCase());
   Get.put(GameController());
+  // Game session
   Get.put(GameSessionRepository());
   Get.put(GameSessionUseCase());
   Get.put(GameSessionController());
@@ -43,14 +47,17 @@ class MyApp extends StatelessWidget {
     AuthenticationController authenticationController = Get.find();
 
     return GetMaterialApp(
-        title: 'Mathlingo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: Obx(() => authenticationController.isLogged
-            ? const HomePage()
-            : const LoginPage()));
+      title: 'Mathlingo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: Obx(
+        () => authenticationController.isLogged
+            ? HomePage(email: authenticationController.email)
+            : const LoginPage(),
+      ),
+    );
   }
 }

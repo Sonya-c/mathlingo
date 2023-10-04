@@ -8,17 +8,18 @@ import '../../widgets/responsive_container.dart';
 import 'game_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String email;
+
+  const HomePage({super.key, required this.email});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  //§User user = Get.arguments[0];
-  AuthenticationController authenticationController = Get.find();
-  GameController gameController = Get.find();
-  GameSessionController _gameSessionController = Get.find();
+  final AuthenticationController _authenticationController = Get.find();
+  final GameController _gameController = Get.find();
+  final GameSessionController _gameSessionController = Get.find();
 
   int level = 0;
 
@@ -26,34 +27,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getLevel();
-    _setLevel();
   }
 
   _getLevel() async {
-    String email = await authenticationController.email;
-
-    List gameSessions = await _gameSessionController.getGameSessions(email);
+    List gameSessions =
+        await _gameSessionController.getGameSessions(widget.email);
 
     if (gameSessions.isNotEmpty) {
       GameSession lastSession = gameSessions[gameSessions.length - 1];
-
-      if (lastSession.correctAnwers > 3) {
-        level = lastSession.level + 1;
-      } else if (lastSession.correctAnwers < 3) {
-        level = lastSession.level - 1;
-      } else {
-        level = lastSession.level;
-      }
-
-      await gameController.setLevel(level);
+      await _gameController.retriveLevel(lastSession);
     }
-  }
-
-  _setLevel() async {
-    level = await gameController.getLevel();
-    setState(() {
-      level = level;
-    });
   }
 
   @override
@@ -65,18 +48,21 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             key: const Key("home_page_retun_button"),
             onPressed: () async {
-              await authenticationController.logOut();
+              await _gameController.clearState();
+              await _authenticationController.logOut();
             },
             icon: const Icon(Icons.logout),
           )
         ],
       ),
       children: [
-        Text("Level $level"),
+        Obx(
+          () => Text("Level ${_gameController.level}"),
+        ),
         FilledButton(
           key: const Key("home_page_play_button"),
           onPressed: () async {
-            Get.to(() => GamePage(updateHome: _setLevel));
+            Get.to(() => const GamePage());
           },
           style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
