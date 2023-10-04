@@ -35,34 +35,36 @@ class Numpad extends StatelessWidget {
             : (index == 10)
                 ? "C"
                 : "GO",
-        style: const TextStyle(fontSize: 25),
+        style: const TextStyle(fontSize: 20),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    /*List options = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+      [0, 10, 11]
+    ];*/
+    List options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11];
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 3,
-      crossAxisSpacing: 10.0,
-      mainAxisSpacing: 10.0,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
       childAspectRatio: 1.5,
-      children: [
-        numpadButton(1),
-        numpadButton(2),
-        numpadButton(3),
-        numpadButton(4),
-        numpadButton(5),
-        numpadButton(6),
-        numpadButton(7),
-        numpadButton(8),
-        numpadButton(9),
-        numpadButton(0),
-        numpadButton(10),
-        numpadButton(11),
-      ],
+      children: options.map((index) => numpadButton(index)).toList(),
     );
+
+    /*return Column(
+        children: options
+            .map((row) => Row(
+                  children: List<Widget>.from(
+                      row.map((index) => numpadButton(index))),
+                ))
+            .toList());*/
   }
 }

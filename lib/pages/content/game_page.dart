@@ -43,13 +43,16 @@ class _GamePageState extends State<GamePage> {
     });
   }
 
-  _submmitAnswer(Duration duration) async {
+  _submmitAnswer(Duration duration, bool isCorrect) async {
     setState(() {
       totalTime = Duration(
         minutes: totalTime.inMinutes + duration.inMinutes,
         seconds: totalTime.inSeconds + duration.inSeconds,
       );
       numQuestions++;
+      if (isCorrect) {
+        correctAnswers++;
+      }
     });
 
     if (numQuestions <= 6) {

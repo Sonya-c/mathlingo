@@ -42,21 +42,24 @@ class CorrectAnswer extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: acentColor[800]),
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: isCorrect ? 0 : 15),
               Row(
-                children: [
-                  Text(
-                    "Correct answer: ",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: acentColor[800]),
-                  ),
-                  Text(
-                    correctAnswer,
-                    style: TextStyle(fontSize: 20, color: acentColor[800]),
-                  ),
-                ],
+                children: isCorrect
+                    ? []
+                    : [
+                        Text(
+                          "Correct answer: ",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: acentColor[800]),
+                        ),
+                        Text(
+                          correctAnswer,
+                          style:
+                              TextStyle(fontSize: 20, color: acentColor[800]),
+                        ),
+                      ],
               ),
               Row(
                 children: [

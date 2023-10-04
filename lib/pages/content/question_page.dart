@@ -75,7 +75,7 @@ class _QuestionPageState extends State<QuestionPage> {
       ),
     );
 
-    await widget.submmitAnswer(stopwatch.elapsed);
+    await widget.submmitAnswer(stopwatch.elapsed, isCorrect);
 
     _clearAnswer();
     stopwatch.reset();
@@ -85,21 +85,25 @@ class _QuestionPageState extends State<QuestionPage> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(children: [
-      Text(
-        (widget.numQuestions <= 6)
-            ? 'Quiz: question ${widget.numQuestions}/6'
-            : 'Quiz',
-        key: const Key("game_page_appbar_title"),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+          Text(
+            "Quiz: Question ${widget.numQuestions}/6",
+            key: const Key("game_page_appbar_title"),
+            style: const TextStyle(fontSize: 20),
+          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.pause)),
+        ],
       ),
-      const SizedBox(
-        height: 50,
-      ),
+      const SizedBox(height: 25),
       PanelWidget(
         question: widget.question.toString(),
         answer: answer,
       ),
       const SizedBox(
-        height: 80,
+        height: 25,
       ),
       Numpad(
         updateAnswer: _updateAnswer,
