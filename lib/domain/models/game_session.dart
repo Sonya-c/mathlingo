@@ -1,8 +1,22 @@
+import 'package:hive/hive.dart';
+
+part 'game_session.g.dart';
+
+@HiveType(typeId: 0)
 class GameSession {
+  @HiveField(0)
   int? id;
+
+  @HiveField(1)
   String userEmail;
+
+  @HiveField(2)
   Duration duration;
+
+  @HiveField(3)
   int correctAnwers;
+
+  @HiveField(4)
   int level;
 
   GameSession({
