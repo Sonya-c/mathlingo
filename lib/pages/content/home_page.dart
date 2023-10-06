@@ -1,6 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
 import 'package:mathlingo/controller/game_controller.dart';
 import 'package:mathlingo/controller/game_session_controller.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // _getLevel();
+    _getLevel();
   }
 
 _getLevel() async {
@@ -44,6 +45,7 @@ _getLevel() async {
 
   if (gameSessions.isNotEmpty) {
     GameSession lastSession = gameSessions.last;
+    logInfo(lastSession.level);
     await _gameController.retriveLevel(lastSession);
   }
 }

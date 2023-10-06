@@ -42,9 +42,9 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   _clearAnswer() {
-    setState(() {
-      answer = "";
-    });
+    if (mounted) {
+      setState(() => answer = "");
+    }
   }
 
   _submmitAnswer() async {
