@@ -58,7 +58,7 @@ class _GamePageState extends State<GamePage> {
     if (numQuestions <= 6) {
       _loadProblem();
     } else {
-      _gameSessionController.addGameSession(
+      await _gameSessionController.synchronizeGameSessions(
         GameSession(
           userEmail: _authenticationController.getEmail,
           duration: totalTime,

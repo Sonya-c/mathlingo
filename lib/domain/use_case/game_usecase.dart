@@ -57,7 +57,9 @@ class GameUseCase {
         num2 = next(10 * (digits - 1), 10 * digits);
 
         if (num1 < num2) {
-          [num1, num2] = [num2, num1]; // lol, find a pythonic swap
+          int temp = num1;
+          num1 = num2;
+          num2 = temp;
           logInfo("swap");
         }
         answer = num1 - num2;
@@ -117,7 +119,7 @@ class GameUseCase {
     level.value = gameSession.level;
 
     if (gameSession.correctAnwers > mathAnswers.length ~/ 2) {
-      level.value = level.value++;
+      level.value++;
     } else if (gameSession.correctAnwers < mathAnswers.length ~/ 2) {
       // to level down it must be less (not equal)
       if (level.value > 1) level.value--;
