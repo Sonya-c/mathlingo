@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/game_controller.dart';
 import 'package:mathlingo/controller/game_session_controller.dart';
+import 'package:mathlingo/domain/models/game_session.dart';
 import 'package:mathlingo/domain/repositories/game_session_repository.dart';
 import 'package:mathlingo/domain/use_case/game_session_usecase.dart';
 import 'package:mathlingo/domain/use_case/game_usecase.dart';
@@ -21,6 +23,7 @@ void main() async {
     ),
   );
 
+  WidgetsFlutterBinding.ensureInitialized();
   // Authentication
   Get.put(Repository());
   Get.put(AuthenticationUseCase());
@@ -35,6 +38,9 @@ void main() async {
   Get.put(GameSessionRepository());
   Get.put(GameSessionUseCase());
   Get.put(GameSessionController());
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(GameSessionAdapter());
 
   runApp(const MyApp());
 }

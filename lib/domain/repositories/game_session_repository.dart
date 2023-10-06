@@ -21,11 +21,16 @@ class GameSessionRepository {
     await _localDataSource.insertGameSession(session);
   }
 
-  Future<List<GameSession>> getAllLocalGameSessions() async {
-    return _localDataSource.getAllGameSessions();
-  }
+
 
   Future<void> deleteLocalGameSession(int? id) async {
     await _localDataSource.deleteGameSession(id);
   }
+
+  Future<void> deleteLocalGameSessionByEmail(String email) async {
+    await _localDataSource.deleteGameSessionByEmail(email);
+  }
+
+  Future<List<GameSession>> getLocalGameSessionsByEmail(String email) async =>
+      await _localDataSource.getGameSessionsByEmail(email);
 }

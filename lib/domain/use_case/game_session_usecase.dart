@@ -15,10 +15,13 @@ class GameSessionUseCase {
   // Local methods
   Future<void> insertLocalGameSession(GameSession gameSession) async =>
      await _gameSessionRepository.insertLocalGameSession(gameSession);
-
-  Future<List<GameSession>> getAllLocalGameSessions() async => 
-     _gameSessionRepository.getAllLocalGameSessions();
   
   Future<void> deleteLocalGameSession(int? id) async =>
      await _gameSessionRepository.deleteLocalGameSession(id);
+
+  Future<void> deleteLocalGameSessionByEmail(String email) async =>
+     await _gameSessionRepository.deleteLocalGameSessionByEmail(email);
+
+  Future<List<GameSession>>  getLocalGameSessionsByEmail(String email) async =>
+     await _gameSessionRepository.getLocalGameSessionsByEmail(email);
 }

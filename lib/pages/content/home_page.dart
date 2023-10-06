@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mathlingo/controller/authentication_controller.dart';
@@ -29,15 +30,23 @@ class _HomePageState extends State<HomePage> {
     _getLevel();
   }
 
-  _getLevel() async {
-    List gameSessions =
-        await _gameSessionController.getGameSessions(widget.email);
+_getLevel() async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  List<GameSession> gameSessions = [];
 
-    if (gameSessions.isNotEmpty) {
-      GameSession lastSession = gameSessions[gameSessions.length - 1];
-      await _gameController.retriveLevel(lastSession);
-    }
+  if (connectivityResult == ConnectivityResult.none) {
+    // Offline: Retrieve game sessions from local storage
+    gameSessions = await _gameSessionController.getLocalGameSessionsByEmail(widget.email);
+  } else {
+    // Online: Retrieve game sessions from the web service
+    gameSessions = await _gameSessionController.getGameSessions(widget.email);
   }
+
+  if (gameSessions.isNotEmpty) {
+    GameSession lastSession = gameSessions.last;
+    await _gameController.retriveLevel(lastSession);
+  }
+}
 
   @override
   Widget build(BuildContext context) {
