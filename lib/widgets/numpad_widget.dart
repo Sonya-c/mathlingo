@@ -4,29 +4,37 @@ class Numpad extends StatelessWidget {
   final updateAnswer;
   final clearAnswer;
   final submmitAnswer;
+  final bool disabled;
 
   const Numpad({
     super.key,
     required this.updateAnswer,
     required this.clearAnswer,
     required this.submmitAnswer,
+    this.disabled = false,
   });
 
   Widget numpadButton(int index) {
     return FilledButton(
       key: Key("numpad_widget_$index"),
       onPressed: () {
-        if (index <= 9) {
-          updateAnswer(index.toString());
-        } else if (index == 10) {
-          clearAnswer();
-        } else {
-          submmitAnswer();
+        if (!disabled) {
+          if (index <= 9) {
+            updateAnswer(index.toString());
+          } else if (index == 10) {
+            clearAnswer();
+          } else {
+            submmitAnswer();
+          }
         }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
-          index <= 9 ? Colors.blue : Colors.orange,
+          disabled
+              ? Colors.grey
+              : index <= 9
+                  ? Colors.blue
+                  : Colors.orange,
         ),
       ),
       child: Text(
