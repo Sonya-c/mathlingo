@@ -21,13 +21,13 @@ class _GamePageState extends State<GamePage> {
   final AuthenticationController _authenticationController = Get.find();
   final GameSessionController _gameSessionController = Get.find();
 
-  int numQuestions = 1;
-  int correctAnswers = 0;
-  int levelUp = 0;
-  Duration totalTime = const Duration(minutes: 0, seconds: 0);
+  int _numQuestions = 1;
+  int _correctAnswers = 0;
+  int _levelUp = 0;
+  Duration _totalTime = const Duration(minutes: 0, seconds: 0);
 
   MathProblem _question = MathProblem(0, 0, "+", 0);
-  List<MathAnswer> results = [];
+  List<MathAnswer> _results = [];
 
   @override
   void initState() {
@@ -44,16 +44,12 @@ class _GamePageState extends State<GamePage> {
   }
 
   _submmitAnswer(Duration duration, bool isCorrect) async {
-    setState(() {
-      totalTime = Duration(
-        minutes: totalTime.inMinutes + duration.inMinutes,
-        seconds: totalTime.inSeconds + duration.inSeconds,
-      );
-      numQuestions++;
-      if (isCorrect) {
-        correctAnswers++;
-      }
-    });
+    int numQuestions = _numQuestions + 1;
+    Duration totalTime = Duration(
+      minutes: _totalTime.inMinutes + duration.inMinutes,
+      seconds: _totalTime.inSeconds + duration.inSeconds,
+    );
+    int correctAnswers = _correctAnswers + (isCorrect ? 1 : 0);
 
     if (numQuestions <= 6) {
       _loadProblem();
@@ -67,36 +63,45 @@ class _GamePageState extends State<GamePage> {
         ),
       );
 
-      results = await _gameController.getAnswers();
-      levelUp = await _gameController.levelUp();
+      var results = await _gameController.getAnswers();
+      var levelUp = await _gameController.levelUp();
 
-      await _gameController.clearAnswers();
+      setState(() {
+        _levelUp = levelUp;
+        _results = results;
+      });
     }
+
+    setState(() {
+      _numQuestions = numQuestions;
+      _totalTime = totalTime;
+      _correctAnswers = correctAnswers;
+    });
   }
 
-  void _resetGame() {
+  void _resetGame() async {
     setState(() {
-      numQuestions = 1;
-      correctAnswers = 0;
-      totalTime = const Duration(minutes: 0, seconds: 0);
+      _numQuestions = 1;
+      _correctAnswers = 0;
+      _totalTime = const Duration(minutes: 0, seconds: 0);
     });
-
+    await _gameController.clearAnswers();
     _loadProblem();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (numQuestions <= 6
+    return (_numQuestions <= 6
         ? QuestionPage(
-            numQuestions: numQuestions,
+            numQuestions: _numQuestions,
             question: _question,
             submmitAnswer: _submmitAnswer,
           )
         : ResultsPage(
-            levelUp: levelUp,
-            correctAnswers: correctAnswers,
-            totalTime: totalTime,
-            results: results,
+            levelUp: _levelUp,
+            correctAnswers: _correctAnswers,
+            totalTime: _totalTime,
+            results: _results,
             resetGame: _resetGame,
           ));
   }

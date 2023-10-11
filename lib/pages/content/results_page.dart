@@ -22,9 +22,9 @@ class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(children: [
-      const Text(
-        "Results",
-        style: TextStyle(fontSize: 50),
+      Text(
+        "Results $levelUp",
+        style: const TextStyle(fontSize: 50),
       ),
       const SizedBox(
         height: 25,
