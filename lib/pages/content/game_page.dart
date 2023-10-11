@@ -21,6 +21,7 @@ class _GamePageState extends State<GamePage> {
   final AuthenticationController _authenticationController = Get.find();
   final GameSessionController _gameSessionController = Get.find();
 
+  bool _finished = false;
   int _numQuestions = 1;
   int _correctAnswers = 0;
   int _levelUp = 0;
@@ -51,31 +52,36 @@ class _GamePageState extends State<GamePage> {
     );
     int correctAnswers = _correctAnswers + (isCorrect ? 1 : 0);
 
-    if (numQuestions <= 6) {
-      _loadProblem();
-    } else {
-      await _gameSessionController.synchronizeGameSessions(
-        GameSession(
-          userEmail: _authenticationController.getEmail,
-          duration: totalTime,
-          correctAnwers: correctAnswers,
-          level: _gameController.level.value,
-        ),
-      );
-
-      var results = await _gameController.getAnswers();
-      var levelUp = await _gameController.levelUp();
-
-      setState(() {
-        _levelUp = levelUp;
-        _results = results;
-      });
-    }
-
     setState(() {
       _numQuestions = numQuestions;
       _totalTime = totalTime;
       _correctAnswers = correctAnswers;
+    });
+
+    if (numQuestions <= 6) {
+      _loadProblem();
+    } else {
+      _finishGame();
+    }
+  }
+
+  _finishGame() async {
+    await _gameSessionController.synchronizeGameSessions(
+      GameSession(
+        userEmail: _authenticationController.getEmail,
+        duration: _totalTime,
+        correctAnwers: _correctAnswers,
+        level: _gameController.level.value,
+      ),
+    );
+
+    var results = await _gameController.getAnswers();
+    var levelUp = await _gameController.levelUp();
+
+    setState(() {
+      _levelUp = levelUp;
+      _results = results;
+      _finished = true;
     });
   }
 
@@ -84,25 +90,29 @@ class _GamePageState extends State<GamePage> {
       _numQuestions = 1;
       _correctAnswers = 0;
       _totalTime = const Duration(minutes: 0, seconds: 0);
+      _finished = false;
     });
+
     await _gameController.clearAnswers();
     _loadProblem();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (_numQuestions <= 6
+    return !_finished
         ? QuestionPage(
             numQuestions: _numQuestions,
             question: _question,
             submmitAnswer: _submmitAnswer,
+            finishGame: _finishGame,
           )
         : ResultsPage(
             levelUp: _levelUp,
             correctAnswers: _correctAnswers,
+            numQuestions: _numQuestions,
             totalTime: _totalTime,
             results: _results,
             resetGame: _resetGame,
-          ));
+          );
   }
 }

@@ -103,10 +103,10 @@ class GameUseCase {
       if (ans.isCorrect) totalCorrectAnswers++;
     }
 
-    if (totalCorrectAnswers > mathAnswers.length ~/ 2) {
+    if (totalCorrectAnswers > 6) {
       level.value++;
       return 1;
-    } else if (totalCorrectAnswers < mathAnswers.length ~/ 2) {
+    } else if (totalCorrectAnswers < 6) {
       // to level down it must be less (not equal)
       if (level > 1) level.value--;
       return -1;
@@ -118,9 +118,9 @@ class GameUseCase {
   Future<void> retriveLevel(GameSession gameSession) async {
     level.value = gameSession.level;
 
-    if (gameSession.correctAnwers > mathAnswers.length ~/ 2) {
+    if (gameSession.correctAnwers > 6) {
       level.value++;
-    } else if (gameSession.correctAnwers < mathAnswers.length ~/ 2) {
+    } else if (gameSession.correctAnwers < 6) {
       // to level down it must be less (not equal)
       if (level.value > 1) level.value--;
     }

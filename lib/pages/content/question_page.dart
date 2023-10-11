@@ -14,12 +14,14 @@ class QuestionPage extends StatefulWidget {
   final int numQuestions;
   final MathProblem question;
   final submmitAnswer;
+  final finishGame;
 
   const QuestionPage({
     super.key,
     required this.numQuestions,
     required this.question,
     required this.submmitAnswer,
+    required this.finishGame,
   });
 
   @override
@@ -93,7 +95,22 @@ class _QuestionPageState extends State<QuestionPage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                pause = !pause;
+
+                if (pause) {
+                  stopwatch.stop();
+                } else {
+                  stopwatch.start();
+                }
+              });
+            },
+            icon: pause
+                ? const Icon(Icons.play_arrow_sharp)
+                : const Icon(Icons.pause),
+          ),
           Text(
             "Quiz: Question ${widget.numQuestions}/6",
             key: const Key("game_page_appbar_title"),
@@ -101,17 +118,24 @@ class _QuestionPageState extends State<QuestionPage> {
           ),
           IconButton(
               onPressed: () {
-                setState(() {
-                  pause = !pause;
-
-                  if (pause) {
-                    stopwatch.stop();
-                  } else {
-                    stopwatch.start();
-                  }
-                });
+                Get.defaultDialog(
+                  title: "Are you sure?",
+                  middleText:
+                      "Are you sure you want to finish this session? (this answer won't be evaluated)",
+                  textConfirm: "Yes, finish session",
+                  textCancel: "No, keep playing",
+                  barrierDismissible: false,
+                  radius: 10,
+                  titlePadding: const EdgeInsets.all(10),
+                  contentPadding: const EdgeInsets.all(10),
+                  buttonColor: Colors.red,
+                  onConfirm: () {
+                    widget.finishGame();
+                    Get.back();
+                  },
+                );
               },
-              icon: const Icon(Icons.pause)),
+              icon: const Icon(Icons.send)),
         ],
       ),
       const SizedBox(height: 25),

@@ -6,6 +6,7 @@ import 'package:mathlingo/widgets/responsive_container.dart';
 class ResultsPage extends StatelessWidget {
   final int levelUp;
   final int correctAnswers;
+  final int numQuestions;
   final Duration totalTime;
   final List<MathAnswer> results;
   final resetGame;
@@ -14,6 +15,7 @@ class ResultsPage extends StatelessWidget {
     super.key,
     required this.levelUp,
     required this.correctAnswers,
+    required this.numQuestions,
     required this.totalTime,
     required this.results,
     required this.resetGame,
@@ -22,9 +24,9 @@ class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(children: [
-      Text(
-        "Results $levelUp",
-        style: const TextStyle(fontSize: 50),
+      const Text(
+        "Results",
+        style: TextStyle(fontSize: 50),
       ),
       const SizedBox(
         height: 25,
@@ -46,6 +48,13 @@ class ResultsPage extends StatelessWidget {
       Text(
         "Correct answers $correctAnswers/6",
         style: const TextStyle(fontSize: 25),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Text(
+        numQuestions == 6 ? "" : "${6 - numQuestions} questions left",
+        style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(
         height: 5,
@@ -125,10 +134,10 @@ class ResultsPage extends StatelessWidget {
           ),
         ),
         child: const Text(
-          "Go to home",
+          "Home",
           style: TextStyle(fontSize: 20),
         ),
-      )
+      ),
     ]);
   }
 }
