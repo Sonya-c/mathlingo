@@ -27,11 +27,13 @@ class GameSessionController {
     } else {
       logInfo("You are ONLINE");
       // Online: Check for local data and upload to web service
-      List<GameSession> localSessions = await _gameSessionUseCase.getLocalGameSessionsByEmail(currentSession.userEmail);
+      List<GameSession> localSessions = await _gameSessionUseCase
+          .getLocalGameSessionsByEmail(currentSession.userEmail);
       for (var session in localSessions) {
         bool success = await _gameSessionUseCase.addGameSession(session);
         if (success) {
-          await _gameSessionUseCase.deleteLocalGameSessionByEmail(session.userEmail);
+          await _gameSessionUseCase
+              .deleteLocalGameSessionByEmail(session.userEmail);
         }
       }
       // Add current game session
