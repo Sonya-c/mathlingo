@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:mathlingo/domain/models/game_session.dart';
 
@@ -8,7 +10,7 @@ import '../domain/models/math_problem.dart';
 class GameController {
   final GameUseCase _gameUseCase = Get.find();
 
-  get level => _gameUseCase.level;
+  final level = 1.obs;
 
   Future<MathProblem> generateProblem() async =>
       await _gameUseCase.generateProblem();
@@ -30,7 +32,9 @@ class GameController {
   }
 
   Future<int> levelUp() async {
-    return await _gameUseCase.levelUp();
+    int levelup = await _gameUseCase.levelUp();
+    level.value = _gameUseCase.level.value;
+    return levelup;
   }
 
   Future<void> clearState() async {
@@ -38,6 +42,7 @@ class GameController {
   }
 
   Future<void> retriveLevel(GameSession gameSession) async {
-    return await _gameUseCase.retriveLevel(gameSession);
+    await _gameUseCase.retriveLevel(gameSession);
+    level.value = _gameUseCase.level.value;
   }
 }

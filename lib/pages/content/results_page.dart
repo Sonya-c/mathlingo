@@ -53,7 +53,7 @@ class ResultsPage extends StatelessWidget {
         height: 5,
       ),
       Text(
-        numQuestions == 6 ? "" : "${6 - numQuestions} questions left",
+        numQuestions < 6 ? "${6 - numQuestions} questions left" : "",
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(

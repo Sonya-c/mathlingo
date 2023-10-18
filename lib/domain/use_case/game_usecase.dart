@@ -103,10 +103,10 @@ class GameUseCase {
       if (ans.isCorrect) totalCorrectAnswers++;
     }
 
-    if (totalCorrectAnswers > 6) {
+    if (totalCorrectAnswers > 3) {
       level.value++;
       return 1;
-    } else if (totalCorrectAnswers < 6) {
+    } else if (totalCorrectAnswers < 3) {
       // to level down it must be less (not equal)
       if (level > 1) level.value--;
       return -1;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loggy/loggy.dart';
 import 'package:mathlingo/controller/game_session_controller.dart';
 import 'package:mathlingo/domain/models/game_session.dart';
 import 'package:mathlingo/pages/content/question_page.dart';
@@ -78,6 +79,7 @@ class _GamePageState extends State<GamePage> {
     var results = await _gameController.getAnswers();
     var levelUp = await _gameController.levelUp();
 
+    logInfo("game_page._finishGame.levelUp: $levelUp");
     setState(() {
       _levelUp = levelUp;
       _results = results;

@@ -59,11 +59,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Obx(
+      /* home: Obx(
         () => authenticationController.isLogged
             ? HomePage(email: authenticationController.email)
             : const LoginPage(),
-      )
+      )*/
+      home: const HomePage(email: "test1018@gmail.com"),
     );
   }
 }
