@@ -1,4 +1,3 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
@@ -32,19 +31,9 @@ class _HomePageState extends State<HomePage> {
   }
 
 _getLevel() async {
-  var connectivityResult = await (Connectivity().checkConnectivity());
-  List<GameSession> gameSessions = [];
-
-  if (connectivityResult == ConnectivityResult.none) {
-    // Offline: Retrieve game sessions from local storage
-    gameSessions = await _gameSessionController.getLocalGameSessionsByEmail(widget.email);
-  } else {
-    // Online: Retrieve game sessions from the web service
-    gameSessions = await _gameSessionController.getGameSessions(widget.email);
-  }
-
-  if (gameSessions.isNotEmpty) {
-    GameSession lastSession = gameSessions.last;
+  _gameSessionController.getGameSessions(widget.email);
+  if (_gameSessionController.gameSessions.isNotEmpty) {
+    GameSession lastSession = _gameSessionController.gameSessions.last;
     logInfo(lastSession.level);
     await _gameController.retriveLevel(lastSession);
   }

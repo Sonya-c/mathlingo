@@ -8,9 +8,19 @@ import 'package:connectivity/connectivity.dart';
 
 class GameSessionController {
   final GameSessionUseCase _gameSessionUseCase = Get.find();
+  var gameSessions = <GameSession>[].obs;
 
-  Future<List<GameSession>> getGameSessions(String email) async =>
-      await _gameSessionUseCase.getGameSessions(email);
+  Future<void> getGameSessions(String email) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.none) {
+      // Offline: Retrieve game sessions from local storage
+      gameSessions.value = await _gameSessionUseCase.getLocalGameSessionsByEmail(email);
+    } else {
+      // Online: Retrieve game sessions from the web service
+      gameSessions.value = await _gameSessionUseCase.getGameSessions(email);
+    }
+  }
 
   Future<bool> addGameSession(GameSession gameSession) async =>
       await _gameSessionUseCase.addGameSession(gameSession);
