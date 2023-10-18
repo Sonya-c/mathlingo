@@ -31,7 +31,8 @@ class _HomePageState extends State<HomePage> {
   }
 
 _getLevel() async {
-  _gameSessionController.getGameSessions(widget.email);
+  await _gameSessionController.getGameSessions(widget.email);
+  logInfo(widget.email);
   if (_gameSessionController.gameSessions.isNotEmpty) {
     GameSession lastSession = _gameSessionController.gameSessions.last;
     logInfo(lastSession.level);

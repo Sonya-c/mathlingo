@@ -13,6 +13,7 @@ class GameSessionLocalDataSource {
 
   Future<void> insertGameSession(GameSession session) async {
   final box = await this.box;
+  session.id ??= box.length + 1;
     await box.put(session.id, session);
   }
 

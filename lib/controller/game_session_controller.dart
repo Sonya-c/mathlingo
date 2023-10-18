@@ -15,9 +15,11 @@ class GameSessionController {
 
     if (connectivityResult == ConnectivityResult.none) {
       // Offline: Retrieve game sessions from local storage
+      logInfo("You are OFFLINE, getting from local");
       gameSessions.value = await _gameSessionUseCase.getLocalGameSessionsByEmail(email);
     } else {
       // Online: Retrieve game sessions from the web service
+      logInfo("You are ONLINE, getting from web");
       gameSessions.value = await _gameSessionUseCase.getGameSessions(email);
     }
   }
